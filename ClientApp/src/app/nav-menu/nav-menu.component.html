@@ -3,7 +3,7 @@
     class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3"
   >
     <div class="container">
-      <a class="navbar-brand" [routerLink]="['/']">dotnet_deployables</a>
+      <a class="navbar-brand" [routerLink]="['/']">tnebes-dotnet-deployables</a>
       <button
         class="navbar-toggler"
         type="button"
@@ -28,14 +28,10 @@
             <a class="nav-link text-dark" [routerLink]="['/']">Home</a>
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/counter']"
-              >Counter</a
-            >
+            <a class="nav-link text-dark" [routerLink]="['/circular-matrix']">Circular Matrix</a>
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/fetch-data']"
-              >Fetch data</a
-            >
+            <a class="nav-link text-dark disabled" [routerLink]="['/love-calculator']">Love Calculator</a>
           </li>
         </ul>
       </div>
