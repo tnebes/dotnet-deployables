@@ -1,74 +1,85 @@
-<div class="container mt-4">
-  <h2>Circular Matrix Generator</h2>
-  
-  <form (ngSubmit)="generateMatrix()" #matrixForm="ngForm" class="mb-4">
-    <div class="row">
-      <div class="col-md-3 mb-3">
-        <label for="rows" class="form-label">Rows:</label>
-        <input type="number" 
-               class="form-control" 
-               id="rows" 
-               name="rows" 
-               [(ngModel)]="rows" 
-               required 
-               min="1">
-      </div>
-      
-      <div class="col-md-3 mb-3">
-        <label for="cols" class="form-label">Columns:</label>
-        <input type="number" 
-               class="form-control" 
-               id="cols" 
-               name="cols" 
-               [(ngModel)]="cols" 
-               required 
-               min="1">
-      </div>
-      
-      <div class="col-md-3 mb-3">
-        <label for="startPosition" class="form-label">Start Position:</label>
-        <input type="number" 
-               class="form-control" 
-               id="startPosition" 
-               name="startPosition" 
-               [(ngModel)]="startPosition" 
-               required>
-      </div>
-      
-      <div class="col-md-3 mb-3">
-        <label class="form-label">Direction:</label>
-        <div class="form-check">
-          <input class="form-check-input" 
-                 type="checkbox" 
-                 id="clockwise" 
-                 name="clockwise" 
-                 [(ngModel)]="clockwise">
-          <label class="form-check-label" for="clockwise">
-            Clockwise
-          </label>
+<div class="container">
+  <div class="matrix-form-section">
+    <h2>Circular Matrix Generator</h2>
+
+    <form (ngSubmit)="generateMatrix()" #matrixForm="ngForm" class="mb-4">
+      <div class="row">
+        <div class="col-md-3 mb-3">
+          <label for="rows" class="form-label">Rows:</label>
+          <input type="number"
+                 class="form-control"
+                 id="rows"
+                 name="rows"
+                 [(ngModel)]="rows"
+                 required
+                 min="1">
+        </div>
+
+        <div class="col-md-3 mb-3">
+          <label for="cols" class="form-label">Columns:</label>
+          <input type="number"
+                 class="form-control"
+                 id="cols"
+                 name="cols"
+                 [(ngModel)]="cols"
+                 required
+                 min="1">
+        </div>
+
+        <div class="col-md-3 mb-3">
+          <label for="startPosition" class="form-label">Start Position:</label>
+          <select class="form-control"
+                  id="startPosition"
+                  name="startPosition"
+                  [(ngModel)]="startPosition"
+                  required>
+            <option [value]="0">Top Left</option>
+            <option [value]="1">Top Right</option>
+            <option [value]="2">Bottom Right</option>
+            <option [value]="3">Bottom Left</option>
+            <option [value]="4">Centre</option>
+          </select>
+        </div>
+
+        <div class="col-md-3 mb-3">
+          <label class="form-label">Direction:</label>
+          <div class="form-check">
+            <input class="form-check-input"
+                   type="checkbox"
+                   id="clockwise"
+                   name="clockwise"
+                   [(ngModel)]="clockwise">
+            <label class="form-check-label" for="clockwise">
+              Clockwise
+            </label>
+            <br>
+            <label class="form-label">Start from 1</label>
+            <input class="form-check-input"
+                   type="checkbox"
+                   id="startFromOne"
+                   name="startFromOne"
+                   [(ngModel)]="startFromOne">
+          </div>
         </div>
       </div>
-    </div>
-    
-    <button type="submit" class="btn btn-primary">Generate Matrix</button>
-  </form>
 
-  <div *ngIf="error" class="alert alert-danger">
-    {{ error }}
+      <button type="submit" class="btn btn-primary">Generate Matrix</button>
+    </form>
+
+    <div *ngIf="error" class="alert alert-danger">
+      {{ error }}
+    </div>
   </div>
 
-  <div *ngIf="matrix.length > 0" class="matrix-container">
-    <table class="matrix-table">
-      <thead>
-        <tr>
-          <th scope="col" *ngFor="let cell of matrix[0]; let i = index">Column {{i + 1}}</th>
-        </tr>
-      </thead>
-      <tbody>
+  <div *ngIf="matrix.length > 0" class="matrix-container" #matrixContainer>
+    <div class="matrix-wrapper" #matrixWrapper>
+      <table class="matrix-table">
+        <tbody>
         <tr *ngFor="let row of matrix">
-          <td *ngFor="let cell of row">{{ cell }}</td>
+          <td *ngFor="let cell of row"><span>{{ cell }}</span></td>
         </tr>
-      </tbody>
-    </table>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>

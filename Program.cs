@@ -1,6 +1,3 @@
-using dotnet_deployables;
-using Microsoft.AspNetCore.Cors;
-
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 const string corsPolicy = "CorsPolicy";
@@ -9,8 +6,8 @@ builder.Services.AddCors(options =>
     options.AddPolicy(corsPolicy, policy =>
     {
         policy.WithOrigins("https://localhost:44428") // Updated to HTTPS
-              .AllowAnyMethod()
-              .AllowAnyHeader();
+            .AllowAnyMethod()
+            .AllowAnyHeader();
     });
 });
 
@@ -18,10 +15,7 @@ builder.Services.AddControllersWithViews();
 
 WebApplication app = builder.Build();
 
-if (!app.Environment.IsDevelopment())
-{
-    app.UseHsts();
-}
+if (!app.Environment.IsDevelopment()) app.UseHsts();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

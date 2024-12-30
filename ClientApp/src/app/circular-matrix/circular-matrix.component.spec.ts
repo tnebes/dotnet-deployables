@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { CircularMatrixComponent } from './circular-matrix.component';
+import {CircularMatrixComponent} from './circular-matrix.component';
 
 describe('CircularMatrixComponent', () => {
   let component: CircularMatrixComponent;
@@ -8,9 +8,9 @@ describe('CircularMatrixComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CircularMatrixComponent ]
+      declarations: [CircularMatrixComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(CircularMatrixComponent);
     component = fixture.componentInstance;

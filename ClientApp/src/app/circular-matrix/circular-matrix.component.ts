@@ -1,58 +1,95 @@
-import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Constants } from '../Constants';
+import {Component, AfterViewChecked, ElementRef, ViewChild} from '@angular/core';
+import {HttpClient, HttpParams} from '@angular/common/http';
+import {Constants} from '../Constants';
+
+interface MatrixResponse {
+  rows: number;
+  cols: number;
+  matrix: number[][];
+}
 
 @Component({
   selector: 'app-circular-matrix',
   templateUrl: './circular-matrix.component.html',
   styleUrls: ['./circular-matrix.component.css']
 })
-export class CircularMatrixComponent {
-  rows = 3;
-  cols = 3;
-  clockwise = true;
-  startPosition = 1;
+export class CircularMatrixComponent implements AfterViewChecked {
+  @ViewChild('matrixWrapper') matrixWrapper!: ElementRef;
+  @ViewChild('matrixContainer') matrixContainer!: ElementRef;
+
+  rows: number = 5;
+  cols: number = 5;
+  startPosition: number = 0;
+  clockwise: boolean = true;
+  startFromOne: boolean = true;
   matrix: number[][] = [];
-  error = '';
+  error: string = '';
 
-  constructor(private readonly http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {
+  }
 
-  generateMatrix(): void {
+  generateMatrix() {
     if (!this.validateInputs()) {
       return;
     }
 
-    const params = {
-      rows: this.rows,
-      cols: this.cols,
-      clockwise: this.clockwise,
-      startPosition: this.startPosition
-    };
+    this.error = '';
+    const params = new HttpParams()
+      .set('rows', this.rows)
+      .set('cols', this.cols)
+      .set('startPosition', this.startPosition)
+      .set('clockwise', this.clockwise)
+      .set('startFromOne', this.startFromOne);
 
-    this.http.get<number[][]>(Constants.matrix, { params })
-      .subscribe({
-        next: (result) => {
-          this.matrix = result;
-          this.error = '';
-        },
-        error: (err) => {
-          this.error = 'Error generating matrix. Please check your inputs.';
-          console.error('Matrix generation failed:', err);
-        }
-      });
+    this.http.get<MatrixResponse>(Constants.matrix, {params}).subscribe({
+      next: (response) => {
+        this.matrix = response.matrix;
+        document.documentElement.style.setProperty('--cols', this.cols.toString());
+      },
+      error: (error) => {
+        this.error = error.error || 'An error occurred while generating the matrix';
+        this.matrix = [];
+      }
+    });
   }
 
   private validateInputs(): boolean {
     if (this.rows <= 0 || this.cols <= 0 || this.startPosition < 0 || this.startPosition > 4) {
-      console.error('Invalid parameters', { 
-        rows: this.rows, 
+      console.error('Invalid parameters', {
+        rows: this.rows,
         cols: this.cols,
-        startPosition: this.startPosition 
+        startPosition: this.startPosition,
+        clockwise: this.clockwise,
+        startFromOne: this.startFromOne
       });
       this.error = 'Invalid parameters';
       return false;
     }
     return true;
+  }
+
+  ngAfterViewChecked() {
+    this.scaleMatrix();
+  }
+
+  private scaleMatrix() {
+    if (!this.matrixWrapper || !this.matrixContainer || this.matrix.length === 0) return;
+
+    const wrapper = this.matrixWrapper.nativeElement;
+    const container = this.matrixContainer.nativeElement;
+
+    // Reset scale to measure original size
+    wrapper.style.transform = 'scale(1)';
+
+    const wrapperRect = wrapper.getBoundingClientRect();
+    const containerRect = container.getBoundingClientRect();
+
+    // Calculate scale factors
+    const scaleX = (containerRect.width - 40) / wrapperRect.width;
+    const scaleY = (containerRect.height - 40) / wrapperRect.height;
+    const scale = Math.min(scaleX, scaleY, 1); // Don't scale up beyond original size
+
+    wrapper.style.transform = `scale(${scale})`;
   }
 }
 
