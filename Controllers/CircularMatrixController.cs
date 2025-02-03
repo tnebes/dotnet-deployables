@@ -10,7 +10,7 @@ namespace dotnet_deployables.Controllers;
 [ApiController]
 [Route("api/v1/matrix")]
 [Produces("application/json")]
-public class CircularMatrixController : ControllerBase
+public sealed class CircularMatrixController : ControllerBase
 {
     private static readonly Dictionary<Direction, MovementPattern> Movements = new()
     {

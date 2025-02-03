@@ -41,7 +41,7 @@ export class CircularMatrixComponent implements AfterViewChecked {
       .set('clockwise', this.clockwise)
       .set('startFromOne', this.startFromOne);
 
-    this.http.get<MatrixResponse>(Constants.matrix, {params}).subscribe({
+    this.http.get<MatrixResponse>(Constants.MATRIX, {params}).subscribe({
       next: (response) => {
         this.matrix = response.matrix;
         document.documentElement.style.setProperty('--cols', this.cols.toString());
@@ -78,16 +78,14 @@ export class CircularMatrixComponent implements AfterViewChecked {
     const wrapper = this.matrixWrapper.nativeElement;
     const container = this.matrixContainer.nativeElement;
 
-    // Reset scale to measure original size
     wrapper.style.transform = 'scale(1)';
 
     const wrapperRect = wrapper.getBoundingClientRect();
     const containerRect = container.getBoundingClientRect();
 
-    // Calculate scale factors
     const scaleX = (containerRect.width - 40) / wrapperRect.width;
     const scaleY = (containerRect.height - 40) / wrapperRect.height;
-    const scale = Math.min(scaleX, scaleY, 1); // Don't scale up beyond original size
+    const scale = Math.min(scaleX, scaleY, 1);
 
     wrapper.style.transform = `scale(${scale})`;
   }
