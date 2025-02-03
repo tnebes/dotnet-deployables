@@ -19,6 +19,13 @@ export class LoveCalculatorComponent implements OnInit {
   ngOnInit(): void { }
 
   calculateLove(): void {
+    if (this.name1.trim() == '' || this.name2.trim() == '')
+    {
+      console.error("One of the names is blank.");
+      this.result = this.writeError("One or both of the names cannot be blank.");
+      return;
+    }
+
     const params = new HttpParams()
       .set('name1', this.name1)
       .set('name2', this.name2);
@@ -28,7 +35,7 @@ export class LoveCalculatorComponent implements OnInit {
         next: response => this.result = this.writeMessage(response.result),
         error: error => {
           console.error('Error calling love calculator API:', error);
-          this.result = this.writeError();
+          this.result = this.writeError('Error calling love calculator API:');
         }
       });
   }
@@ -37,7 +44,7 @@ export class LoveCalculatorComponent implements OnInit {
     return `${this.name1} and ${this.name2} love themselves ${response}%!`
   }
 
-  private writeError(): string {
-    return 'An unexpected error occurred.'
+  private writeError(message: string): string {
+    return message;
   }
 }
